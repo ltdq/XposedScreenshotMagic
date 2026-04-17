@@ -192,7 +192,7 @@ class ModuleMain : XposedModule() {
                 return inspectSkip("${result.ownerClass}.${result.methodName}() failed", result.throwable)
             }
         }
-        val type = when (val result = readIntField(layoutParams, "type")) {
+        val type = when (val result = readLayoutType(layoutParams)) {
             is FieldReadResult.Value -> result.value
             is FieldReadResult.NullValue -> return inspectSkip("${result.ownerClass}.${result.fieldName} is null")
             is FieldReadResult.Missing -> return inspectSkip("${result.ownerClass}.${result.fieldName} is missing")
@@ -435,15 +435,15 @@ class ModuleMain : XposedModule() {
             is LookupResult.Failure -> FieldReadResult.Failure(lookup.ownerClass, lookup.memberName, lookup.throwable)
         }
 
-    private fun readIntField(target: Any, name: String): FieldReadResult<Int> =
-        when (val lookup = findField(target.javaClass, name)) {
+    private fun readLayoutType(layoutParams: Any): FieldReadResult<Int> =
+        when (val lookup = findField(layoutParams.javaClass, "type")) {
             is LookupResult.Value -> {
                 runCatching {
-                    lookup.value.getInt(target)
+                    lookup.value.getInt(layoutParams)
                 }.fold(
                     onSuccess = { value -> FieldReadResult.Value(value) },
                     onFailure = { error ->
-                        FieldReadResult.Failure(target.javaClass.name, name, unwrapReflectionError(error))
+                        FieldReadResult.Failure(layoutParams.javaClass.name, "type", unwrapReflectionError(error))
                     },
                 )
             }
@@ -696,7 +696,7 @@ class ModuleMain : XposedModule() {
         const val WINDOW_STATE_ANIMATOR = "com.android.server.wm.WindowStateAnimator"
         const val CREATE_SURFACE_LOCKED = "createSurfaceLocked"
         const val SURFACE_CONTROL = "android.view.SurfaceControl"
-        const val SURFACE_CONTROL_TRANSACTION = "android.view.SurfaceControl\$Transaction"
+        const val SURFACE_CONTROL_TRANSACTION = $$"android.view.SurfaceControl$Transaction"
         const val SCREENSHOT_OVERLAY_TYPE = 2036
         const val SECURITY_CENTER_DOCK_TYPE = 2026
         const val SECURITY_CENTER_FLOATING_TYPE = 2003
