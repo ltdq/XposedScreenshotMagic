@@ -1,0 +1,29 @@
+# Gradle
+.gradle/
+build/
+**/build/
+/release/
+/META-INF/
+/app/release/baselineProfiles/
+
+# Android local configuration
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Kotlin/IDE state
+.kotlin/
+.kotlinc/
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local tool state
+/.claude/settings.local.json

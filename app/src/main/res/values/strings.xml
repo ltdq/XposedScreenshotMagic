@@ -1,7 +1,4 @@
 <resources>
     <string name="app_name">XposedScreenshotMagic</string>
-    <string-array name="xposed_scope">
-        <item>android</item>
-        <item>com.android.systemui</item>
-    </string-array>
+    <string name="module_description">Hide specific windows from screenshots and screen recordings on HyperOS Android 15+</string>
 </resources>
